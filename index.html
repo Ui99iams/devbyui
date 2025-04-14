@@ -5,17 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>devbyui | Portfólio de Pablo Uilliams</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2d9a63a4a.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <header>
     <h1><span class="logo">dev</span><span class="highlight">byui</span></h1>
-    <nav>
+    <nav id="nav">
       <ul>
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#habilidades">Habilidades</a></li>
         <li><a href="#projetos">Projetos</a></li>
         <li><a href="#contato">Contato</a></li>
       </ul>
+      <button id="mobile-menu" aria-label="Abrir menu"><i class="fas fa-bars"></i></button>
     </nav>
   </header>
 
@@ -29,7 +34,7 @@
     <h2>Habilidades</h2>
     <ul class="skills">
       <li>Infraestrutura de Redes e CFTV</li>
-      <li>Automação de Processos</li>
+      <li>Automatização de Processos</li>
       <li>Suporte Técnico Estratégico</li>
       <li>Python, PowerShell & Shell Script</li>
       <li>Administração Microsoft 365 / Cloud</li>
@@ -47,7 +52,7 @@
         <p>Desenvolvimento de infraestrutura segura, conectada a sistemas legados e cloud. Gerenciamento de AD, DNS, CFTV e servidores Windows/Linux.</p>
       </div>
       <div class="projeto">
-        <h3>Automação de Processos ERP</h3>
+        <h3>Automatização de Processos ERP</h3>
         <p>Automatização de integrações entre setores usando Python e PowerShell. Redução de retrabalho e maior precisão nos dados operacionais.</p>
       </div>
       <div class="projeto">
@@ -65,10 +70,24 @@
       <textarea name="message" placeholder="Sua mensagem" required></textarea>
       <button type="submit">Enviar</button>
     </form>
+    <div class="social">
+      <a href="https://www.linkedin.com/in/pablouilliams" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="https://github.com/pablouilliams" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="https://wa.me/5511946550436" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
   </section>
 
   <footer>
     <p>© 2025 devbyui | Pablo Uilliams – Visionário em TI</p>
   </footer>
+
+  <script>
+    const menuButton = document.getElementById("mobile-menu");
+    const navList = document.querySelector("nav ul");
+
+    menuButton.addEventListener("click", () => {
+      navList.classList.toggle("open");
+    });
+  </script>
 </body>
 </html>
