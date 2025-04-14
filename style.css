@@ -1,16 +1,32 @@
+:root {
+  --dark: #0f172a;
+  --highlight: #7f5af0;
+  --background: #1a1a1a;
+  --text: #e5e5e5;
+  --accent: #00f7ff;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
-  color: #333;
+  background-color: var(--background);
+  color: var(--text);
 }
 
 header {
-  background-color: #0f172a;
-  color: white;
+  background-color: var(--dark);
+  color: var(--highlight);
   padding: 20px;
   text-align: center;
+}
+
+.logo {
+  color: white;
+}
+
+.highlight {
+  color: var(--highlight);
 }
 
 nav ul {
@@ -22,27 +38,29 @@ nav ul {
 }
 
 nav a {
-  color: white;
+  color: var(--accent);
   text-decoration: none;
+  font-weight: bold;
 }
 
 section {
   padding: 40px 20px;
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
 }
 
 .skills {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .skills li {
-  background-color: #e2e8f0;
-  padding: 8px 12px;
-  border-radius: 5px;
+  background-color: #2d2d2d;
+  padding: 10px 14px;
+  border-radius: 8px;
   list-style: none;
+  color: var(--accent);
 }
 
 .projetos {
@@ -51,36 +69,51 @@ section {
 }
 
 .projeto {
-  background-color: #fff;
+  background-color: #2a2a2a;
   padding: 20px;
-  border-left: 5px solid #0f172a;
-  border-radius: 5px;
+  border-left: 5px solid var(--highlight);
+  border-radius: 8px;
+}
+
+.cv-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 16px;
+  background-color: var(--highlight);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 input, textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #2d2d2d;
+  color: white;
 }
 
 button {
-  padding: 10px;
-  background-color: #0f172a;
+  padding: 12px;
+  background-color: var(--highlight);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 footer {
   text-align: center;
-  padding: 20px;
-  background-color: #0f172a;
-  color: white;
+  padding: 30px;
+  background-color: var(--dark);
+  color: var(--highlight);
+  margin-top: 40px;
 }
