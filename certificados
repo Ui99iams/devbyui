@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificados | Pablo Uilliams</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --dark: #1a1a2e;
+            --light: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 30px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: var(--light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .page-hero {
+            padding: 160px 0 60px;
+            text-align: center;
+        }
+
+        .page-hero .hero-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .page-hero h1 {
+            font-size: 48px;
+            margin-bottom: 18px;
+            font-weight: 800;
+        }
+
+        .page-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 45px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-item .stat-label {
+            font-size: 13px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section {
+            padding: 60px 0 100px;
+        }
+
+        /* Filtros */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .filter-btn {
+            padding: 10px 22px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 50px;
+            color: var(--light);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--light);
+            color: var(--primary);
+            border-color: var(--light);
+        }
+
+        .filter-count {
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.75;
+            margin-bottom: 45px;
+        }
+
+        /* Busca */
+        .search-wrap {
+            max-width: 420px;
+            margin: 0 auto 45px;
+            position: relative;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            color: var(--light);
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-wrap input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-wrap input:focus {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: var(--accent);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* Grid de certificados */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+        }
+
+        .cert-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        .cert-card.hidden {
+            display: none;
+        }
+
+        .cert-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .cert-category {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* cores por categoria */
+        .cat-infraestrutura { background: rgba(102, 126, 234, 0.3); color: #c3cdff; }
+        .cat-redes          { background: rgba(118, 75, 162, 0.35); color: #e3c9ff; }
+        .cat-seguranca      { background: rgba(240, 147, 251, 0.25); color: #ffd6f9; }
+        .cat-desenvolvimento{ background: rgba(72, 187, 165, 0.3); color: #b7f3e6; }
+        .cat-dados          { background: rgba(255, 184, 76, 0.28); color: #ffe2b0; }
+        .cat-gestao         { background: rgba(255, 255, 255, 0.18); color: #ffffff; }
+
+        .cert-icon {
+            font-size: 26px;
+            opacity: 0.85;
+        }
+
+        .cert-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .cert-institution {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .cert-date {
+            font-size: 13px;
+            opacity: 0.65;
+            margin-bottom: 18px;
+        }
+
+        .cert-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .cert-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .cert-btn-view {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .cert-btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .cert-btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--light);
+        }
+
+        .cert-btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            opacity: 0.8;
+            display: none;
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+
+        .empty-state .icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* Modal de visualização */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(6px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--dark);
+            border-radius: 20px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--light);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-image-wrap {
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+        }
+
+        .modal-image-wrap img {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .modal-placeholder {
+            text-align: center;
+            opacity: 0.6;
+            font-size: 14px;
+            padding: 60px 20px;
+        }
+
+        .modal-body {
+            padding: 30px 35px 35px;
+        }
+
+        .modal-body .cert-category {
+            margin-bottom: 14px;
+        }
+
+        .modal-body h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal-body .cert-institution {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .modal-body .cert-date {
+            margin-bottom: 22px;
+        }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-hero h1 {
+                font-size: 32px;
+            }
+
+            .page-hero p {
+                font-size: 16px;
+            }
+
+            .stats-bar {
+                gap: 28px;
+            }
+
+            .stat-item .stat-number {
+                font-size: 28px;
+            }
+
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">Pablo Uilliams</a>
+                <ul class="nav-links">
+                    <li><a href="index.html#sobre">Sobre</a></li>
+                    <li><a href="index.html#projetos">Projetos</a></li>
+                    <li><a href="index.html#skills">Skills</a></li>
+                    <li><a href="certificados.html" class="active">Certificados</a></li>
+                    <li><a href="index.html#contato">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="hero-tag">🎓 Formação Contínua</div>
+            <h1>Certificados & Qualificações</h1>
+            <p>Cursos, formações técnicas e certificações que sustentam minha atuação como Analista de TI — de redes e infraestrutura a desenvolvimento e dados.</p>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalCount">0</span>
+                    <span class="stat-label">Certificados</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="categoryCount">0</span>
+                    <span class="stat-label">Áreas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="institutionCount">0</span>
+                    <span class="stat-label">Instituições</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Buscar por nome ou instituição...">
+            </div>
+
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-filter="todos">Todos</button>
+                <button class="filter-btn" data-filter="infraestrutura">Infraestrutura</button>
+                <button class="filter-btn" data-filter="redes">Redes</button>
+                <button class="filter-btn" data-filter="seguranca">Segurança</button>
+                <button class="filter-btn" data-filter="desenvolvimento">Desenvolvimento</button>
+                <button class="filter-btn" data-filter="dados">Dados & BI</button>
+                <button class="filter-btn" data-filter="gestao">Gestão</button>
+            </div>
+
+            <p class="filter-count" id="filterCount"></p>
+
+            <div class="cert-grid" id="certGrid"></div>
+
+            <div class="empty-state" id="emptyState">
+                <span class="icon">📭</span>
+                <p>Nenhum certificado encontrado com esse filtro/busca.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <button class="modal-close" id="modalClose">✕</button>
+            <div class="modal-image-wrap" id="modalImageWrap"></div>
+            <div class="modal-body">
+                <span class="cert-category" id="modalCategory"></span>
+                <h3 id="modalTitle"></h3>
+                <p class="cert-institution" id="modalInstitution"></p>
+                <p class="cert-date" id="modalDate"></p>
+                <div class="cert-actions">
+                    <a href="#" target="_blank" class="cert-btn cert-btn-view" id="modalLink">Abrir certificado original</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Pablo Uilliams. Designer, Developer & Automation Specialist. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* =========================================================
+           BASE DE CERTIFICADOS
+           ---------------------------------------------------------
+           Edite o array abaixo para adicionar seus ~30 certificados.
+           Campos:
+             titulo       -> nome do curso/certificado
+             instituicao  -> escola, faculdade, plataforma, empresa
+             categoria    -> "infraestrutura" | "redes" | "seguranca" |
+                              "desenvolvimento" | "dados" | "gestao"
+             data         -> ex: "2024" ou "Mar/2024"
+             icone        -> um emoji que representa a categoria
+             imagem       -> caminho/URL da imagem do certificado
+                              (deixe "" se ainda não tiver)
+             arquivo      -> caminho/URL do PDF ou imagem original
+                              para abrir/baixar (deixe "#" por enquanto)
+
+           Dica: coloque os arquivos numa pasta "certificados/" dentro
+           do seu repositório (ex: certificados/mikrotik-mtcna.pdf) e
+           aponte "arquivo" e "imagem" para lá.
+        ========================================================= */
+
+        const certificados = [
+            {
+                titulo: "Modelos, Métodos e Técnicas da Engenharia de Software",
+                instituicao: "Universidade São Judas Tadeu",
+                categoria: "desenvolvimento",
+                data: "Jul/2023",
+                icone: "💻",
+                imagem: "",
+                arquivo: "certificados/engenharia-de-software.pdf"
+            },
+            {
+                titulo: "Projetos e Processos de TI",
+                instituicao: "Universidade São Judas Tadeu",
+                categoria: "gestao",
+                data: "Dez/2024",
+                icone: "📋",
+                imagem: "",
+                arquivo: "certificados/projetos-e-processos-de-ti.pdf"
+            },
+            {
+                titulo: "Sistemas Distribuídos e Mobile",
+                instituicao: "Universidade São Judas Tadeu (em parceria com AWS)",
+                categoria: "infraestrutura",
+                data: "Dez/2023",
+                icone: "🖥️",
+                imagem: "",
+                arquivo: "certificados/sistemas-distribuidos-e-mobile.pdf"
+            },
+            {
+                titulo: "Gestão e Qualidade de Software",
+                instituicao: "Universidade São Judas Tadeu (em parceria com CI&T)",
+                categoria: "desenvolvimento",
+                data: "Jul/2023",
+                icone: "💻",
+                imagem: "",
+                arquivo: "certificados/gestao-e-qualidade-de-software.pdf"
+            },
+            {
+                titulo: "Arquiteturas Empresariais",
+                instituicao: "Universidade São Judas Tadeu",
+                categoria: "infraestrutura",
+                data: "Jul/2025",
+                icone: "🖥️",
+                imagem: "",
+                arquivo: "certificados/arquiteturas-empresariais.pdf"
+            },
+            {
+                titulo: "Governança e Serviços de TI",
+                instituicao: "Universidade São Judas Tadeu",
+                categoria: "gestao",
+                data: "Dez/2024",
+                icone: "📋",
+                imagem: "",
+                arquivo: "certificados/governanca-e-servicos-de-ti.pdf"
+            },
+            {
+                titulo: "Usabilidade, Desenvolvimento Web, Mobile e Jogos",
+                instituicao: "Universidade São Judas Tadeu",
+                categoria: "desenvolvimento",
+                data: "Dez/2023",
+                icone: "💻",
+                imagem: "",
+                arquivo: "certificados/usabilidade-web-mobile-jogos.pdf"
+            },
+            {
+                titulo: "Direito Digital",
+                instituicao: "Universidade São Judas Tadeu",
+                categoria: "gestao",
+                data: "Jul/2024",
+                icone: "📋",
+                imagem: "",
+                arquivo: "certificados/direito-digital.pdf"
+            },
+            {
+                titulo: "Inovação, Sustentabilidade e Competitividade Empresarial",
+                instituicao: "Universidade São Judas Tadeu",
+                categoria: "gestao",
+                data: "Jul/2024",
+                icone: "📋",
+                imagem: "",
+                arquivo: "certificados/inovacao-sustentabilidade-competitividade.pdf"
+            },
+            {
+                titulo: "Inteligência Artificial",
+                instituicao: "Universidade São Judas Tadeu",
+                categoria: "dados",
+                data: "Jul/2025",
+                icone: "📊",
+                imagem: "",
+                arquivo: "certificados/inteligencia-artificial.pdf"
+            },
+            {
+                titulo: "Python",
+                instituicao: "Nerdin Vagas de TI",
+                categoria: "desenvolvimento",
+                data: "Mar/2025",
+                icone: "💻",
+                imagem: "",
+                arquivo: "certificados/python-nerdin.pdf"
+            },
+            {
+                titulo: "Redes TCP/IP",
+                instituicao: "Udemy",
+                categoria: "redes",
+                data: "Jan/2023",
+                icone: "📡",
+                imagem: "",
+                arquivo: "certificados/redes-tcpip-udemy.pdf"
+            },
+            {
+                titulo: "Sistemas Operacionais - Conceitos Básicos",
+                instituicao: "Fundação Bradesco - Escola Virtual",
+                categoria: "infraestrutura",
+                data: "Jan/2021",
+                icone: "🖥️",
+                imagem: "",
+                arquivo: "certificados/sistemas-operacionais-bradesco.pdf"
+            },
+            {
+                titulo: "Formação em Redes de Computadores - Módulo 1",
+                instituicao: "Udemy",
+                categoria: "redes",
+                data: "Out/2022",
+                icone: "📡",
+                imagem: "",
+                arquivo: "certificados/redes-modulo1-udemy.pdf"
+            },
+            {
+                titulo: "Formação em Redes de Computadores - Módulo 2",
+                instituicao: "Udemy",
+                categoria: "redes",
+                data: "Jan/2023",
+                icone: "📡",
+                imagem: "",
+                arquivo: "certificados/redes-modulo2-udemy.pdf"
+            },
+            {
+                titulo: "Formação em Redes de Computadores - Módulo 3",
+                instituicao: "Udemy",
+                categoria: "redes",
+                data: "Jan/2023",
+                icone: "📡",
+                imagem: "",
+                arquivo: "certificados/redes-modulo3-udemy.pdf"
+            },
+            {
+                titulo: "Formação em Redes de Computadores - Módulo 4",
+                instituicao: "Udemy",
+                categoria: "redes",
+                data: "Jan/2023",
+                icone: "📡",
+                imagem: "",
+                arquivo: "certificados/redes-modulo4-udemy.pdf"
+            },
+            {
+                titulo: "Arquitetura de Redes",
+                instituicao: "Udemy",
+                categoria: "redes",
+                data: "Jan/2023",
+                icone: "📡",
+                imagem: "",
+                arquivo: "certificados/arquitetura-de-redes-udemy.pdf"
+            },
+            {
+                titulo: "Certificação Cisco CCNA 200-301 + 4 Cursos",
+                instituicao: "Udemy",
+                categoria: "redes",
+                data: "Jan/2023",
+                icone: "📡",
+                imagem: "",
+                arquivo: "certificados/cisco-ccna-200-301-udemy.pdf"
+            },
+            {
+                titulo: "ITIL 4",
+                instituicao: "Nerdin Vagas de TI",
+                categoria: "gestao",
+                data: "Mar/2025",
+                icone: "📋",
+                imagem: "",
+                arquivo: "certificados/itil4-nerdin.pdf"
+            },
+            {
+                titulo: "Fundamentos de TI - Hardware e Software",
+                instituicao: "Fundação Bradesco - Escola Virtual",
+                categoria: "infraestrutura",
+                data: "Jan/2021",
+                icone: "🖥️",
+                imagem: "",
+                arquivo: "certificados/fundamentos-ti-hardware-software-bradesco.pdf"
+            },
+            {
+                titulo: "Atendimento ao Público",
+                instituicao: "Fundação Bradesco - Escola Virtual",
+                categoria: "gestao",
+                data: "Jan/2021",
+                icone: "📋",
+                imagem: "",
+                arquivo: "certificados/atendimento-ao-publico-bradesco.pdf"
+            },
+            {
+                titulo: "Finanças Pessoais",
+                instituicao: "Fundação Bradesco - Escola Virtual",
+                categoria: "gestao",
+                data: "Jan/2021",
+                icone: "📋",
+                imagem: "",
+                arquivo: "certificados/financas-pessoais-bradesco.pdf"
+            },
+            {
+                titulo: "Ânima TECH Week Experience",
+                instituicao: "Ecossistema Ânima de Educação",
+                categoria: "gestao",
+                data: "Ago/2022",
+                icone: "📋",
+                imagem: "",
+                arquivo: "certificados/anima-tech-week-experience.pdf"
+            }
+
+            /* Continue adicionando os demais certificados aqui,
+               seguindo o mesmo padrão de objeto acima. */
+        ];
+
+        /* ============== RENDERIZAÇÃO ============== */
+
+        const certGrid = document.getElementById('certGrid');
+        const emptyState = document.getElementById('emptyState');
+        const filterCount = document.getElementById('filterCount');
+        const searchInput = document.getElementById('searchInput');
+        const filterBar = document.getElementById('filterBar');
+
+        const categoryLabels = {
+            infraestrutura: "Infraestrutura",
+            redes: "Redes",
+            seguranca: "Segurança",
+            desenvolvimento: "Desenvolvimento",
+            dados: "Dados & BI",
+            gestao: "Gestão"
+        };
+
+        let activeFilter = "todos";
+        let searchTerm = "";
+
+        function renderStats() {
+            document.getElementById('totalCount').textContent = certificados.length;
+            const cats = new Set(certificados.map(c => c.categoria));
+            document.getElementById('categoryCount').textContent = cats.size;
+            const insts = new Set(certificados.map(c => c.instituicao));
+            document.getElementById('institutionCount').textContent = insts.size;
+        }
+
+        function createCard(cert, index) {
+            const card = document.createElement('div');
+            card.className = 'cert-card';
+            card.dataset.categoria = cert.categoria;
+            card.dataset.titulo = cert.titulo.toLowerCase();
+            card.dataset.instituicao = cert.instituicao.toLowerCase();
+            card.style.animationDelay = (index % 9) * 0.05 + 's';
+
+            card.innerHTML = `
+                <div class="cert-top">
+                    <span class="cert-category cat-${cert.categoria}">${categoryLabels[cert.categoria] || cert.categoria}</span>
+                    <span class="cert-icon">${cert.icone || '📄'}</span>
+                </div>
+                <h3>${cert.titulo}</h3>
+                <p class="cert-institution">${cert.instituicao}</p>
+                <p class="cert-date">${cert.data}</p>
+                <div class="cert-actions">
+                    <button class="cert-btn cert-btn-view" data-index="${index}">Ver certificado</button>
+                </div>
+            `;
+
+            card.querySelector('.cert-btn-view').addEventListener('click', () => openModal(cert));
+            return card;
+        }
+
+        function renderGrid() {
+            certGrid.innerHTML = '';
+            let visibleCount = 0;
+
+            certificados.forEach((cert, index) => {
+                const matchesFilter = activeFilter === 'todos' || cert.categoria === activeFilter;
+                const matchesSearch = searchTerm === '' ||
+                    cert.titulo.toLowerCase().includes(searchTerm) ||
+                    cert.instituicao.toLowerCase().includes(searchTerm);
+
+                if (matchesFilter && matchesSearch) {
+                    certGrid.appendChild(createCard(cert, index));
+                    visibleCount++;
+                }
+            });
+
+            emptyState.classList.toggle('show', visibleCount === 0);
+            filterCount.textContent = visibleCount === certificados.length
+                ? `Mostrando todos os ${visibleCount} certificados`
+                : `Mostrando ${visibleCount} de ${certificados.length} certificados`;
+        }
+
+        /* ============== FILTROS ============== */
+
+        filterBar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+
+            filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = btn.dataset.filter;
+            renderGrid();
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value.toLowerCase().trim();
+            renderGrid();
+        });
+
+        /* ============== MODAL ============== */
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalImageWrap = document.getElementById('modalImageWrap');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalInstitution = document.getElementById('modalInstitution');
+        const modalDate = document.getElementById('modalDate');
+        const modalLink = document.getElementById('modalLink');
+        const modalClose = document.getElementById('modalClose');
+
+        function openModal(cert) {
+            modalCategory.textContent = categoryLabels[cert.categoria] || cert.categoria;
+            modalCategory.className = `cert-category cat-${cert.categoria}`;
+            modalTitle.textContent = cert.titulo;
+            modalInstitution.textContent = cert.instituicao;
+            modalDate.textContent = cert.data;
+
+            if (cert.imagem) {
+                modalImageWrap.innerHTML = `<img src="${cert.imagem}" alt="${cert.titulo}">`;
+            } else {
+                modalImageWrap.innerHTML = `<div class="modal-placeholder">📄 Imagem do certificado ainda não adicionada.<br>Edite o campo "imagem" deste item no código.</div>`;
+            }
+
+            if (cert.arquivo && cert.arquivo !== '#') {
+                modalLink.href = cert.arquivo;
+                modalLink.style.display = 'block';
+                modalLink.textContent = 'Abrir certificado original';
+            } else {
+                modalLink.style.display = 'none';
+            }
+
+            modalOverlay.classList.add('show');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('show');
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        /* ============== INIT ============== */
+
+        renderStats();
+        renderGrid();
+    </script>
+</body>
+</html>
